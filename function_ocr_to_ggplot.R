@@ -39,9 +39,12 @@ ocr_and_bbox_ggplot <- function(filename) {
   erg <- rbindlist(erg)
   
   myplot <- image_ggplot(image = image) #using geom_polygon because geom_rect was not possible because of error
-  p <- myplot + geom_polygon(data = erg, 
-                             aes(x = x, y = y, group = id, fill = confidence), 
-                             color="red", size = .1, alpha = .5)
+  p <- myplot + 
+    geom_polygon(
+      data = erg, 
+      aes(x = x, y = y, group = id, fill = confidence), 
+      color="red", size = .1, alpha = .5
+    )
   
   return(p)
 }

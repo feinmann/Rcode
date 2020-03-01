@@ -1,7 +1,7 @@
 library(ggplot2) #version 3.1.0
 library(data.table) #version 1.12.6
 library(magick) # version 2.2
-
+require(tesseract)
 
 #' Return ggplot from ocr with overlay of boundingboxes indicating confidence
 #'

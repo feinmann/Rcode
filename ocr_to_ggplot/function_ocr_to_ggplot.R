@@ -18,7 +18,8 @@ ocr_and_bbox_ggplot <- function(filename) {
   ocr_data <- image_ocr_data(image, language = "eng")
   
   setDT(ocr_data)
-  ocr_data[, c("x_min", "y_min", "x_max", "y_max") := tstrsplit(bbox, ",", fixed=TRUE)]
+  ocr_data[, c("x_min", "y_min", "x_max", "y_max") := tstrsplit(
+    bbox, ",", fixed=TRUE)]
   ocr_data[, x_min := as.numeric(x_min)]
   ocr_data[, x_max := as.numeric(x_max)]
   ocr_data[, y_min := as.numeric(y_min)]
@@ -31,14 +32,17 @@ ocr_and_bbox_ggplot <- function(filename) {
                                            c(tmp$x_min, tmp$y_max), 
                                            c(tmp$x_max, tmp$y_max), 
                                            c(tmp$x_max, tmp$y_min)))]
-    erg[[rownumber]] <- cbind(data.table(x = lapply(unlist(ocr_data[rownumber,]$ecken, recursive = FALSE), `[[`, 1) %>% unlist()),
-                              data.table(y = lapply(unlist(ocr_data[rownumber,]$ecken, recursive = FALSE), `[[`, 2) %>% unlist()),
+    erg[[rownumber]] <- cbind(data.table(x = lapply(unlist(
+      ocr_data[rownumber,]$ecken, recursive = FALSE), `[[`, 1) %>% unlist()),
+                              data.table(y = lapply(unlist(
+      ocr_data[rownumber,]$ecken, recursive = FALSE), `[[`, 2) %>% unlist()),
                               tmp[, .(confidence)])
     erg[[rownumber]][ , id := rownumber]
   }
   erg <- rbindlist(erg)
   
-  myplot <- image_ggplot(image = image) #using geom_polygon because geom_rect was not possible because of error
+  # using geom_polygon because geom_rect was not possible because of error
+  myplot <- image_ggplot(image = image) 
   p <- myplot + 
     geom_polygon(
       data = erg, 
